@@ -8,23 +8,70 @@ public class PlayerController : MonoBehaviour {
 	[Range(0f, 10f)]
 	public float moveSpeed;
 	public float xMin, xMax, zMin, zMax;
+	public GameObject attack1Box, attack2Box, attack3Box;
+
+	public Sprite attack1SpriteHitFrame, attack2SpriteHitFrame, attack3SpriteHitFrame;
+	SpriteRenderer currentSprite;
 
 
 	private Rigidbody rb;
 	private Animator animator;
+	private AnimatorStateInfo curStateInfo;
 	private bool facingRight;
 
+
+
+
+	//Used to record which animator state currently in
+	static int currentState;
+	static int idleState = Animator.StringToHash("Base Layer.Idle");
+	static int walkState = Animator.StringToHash("Base Layer.Walk");
+	static int jumpState = Animator.StringToHash("Base Layer.Jump");
+	static int tauntState = Animator.StringToHash("Base Layer.Taunt");
+	static int hurtState = Animator.StringToHash("Base Layer.Hurt");
+	static int attack1State = Animator.StringToHash("Base Layer.Attack1");
+	static int attack2State = Animator.StringToHash("Base Layer.Attack2");
+	static int attack3State = Animator.StringToHash("Base Layer.Attack3");
+	static int attack4State = Animator.StringToHash("Base Layer.Attack4");
 
 	// Use this for initialization
 	void Start () {
 		rb = GetComponent<Rigidbody>();
+		currentSprite = GetComponent<SpriteRenderer>();
 		animator = GetComponent<Animator>();
 		facingRight = true;
 	}
-	
+
+	private void Update()
+	{
+		curStateInfo = animator.GetCurrentAnimatorStateInfo(0);
+		currentState = curStateInfo.fullPathHash;
+
+		if (currentState == idleState)
+			Debug.Log("Idle State");
+		if (currentState == walkState)
+			Debug.Log("Walk State");
+		if (currentState == jumpState)
+			Debug.Log("Jump State");
+		if (currentState == tauntState)
+			Debug.Log("Taunt State");
+		if (currentState == hurtState)
+			Debug.Log("Hurt State");
+		if (currentState == attack1State)
+			Debug.Log("Attack1 State");
+		if (currentState == attack2State)
+			Debug.Log("Attack2 State");
+		if (currentState == attack3State)
+			Debug.Log("Attack3 State");
+		if (currentState == attack4State)
+			Debug.Log("Attack4 State");
+		
+	}
 	// Update is called once per frame
 	void FixedUpdate () {
 
+
+		//-------MOVEMENT---------------------------------
 		float moveX = Input.GetAxis("Horizontal");
 		float moveZ = Input.GetAxis("Vertical");
 
@@ -45,6 +92,36 @@ public class PlayerController : MonoBehaviour {
 		{
 			Flip();
 		}
+
+		//------------COMBO ATTACK------------------------
+		if (Input.GetMouseButton(0))
+		{
+			animator.SetBool("Attack", true);
+		}
+		else
+		{
+			animator.SetBool("Attack", false);
+		}
+
+		if (attack1SpriteHitFrame == currentSprite.sprite)
+		{
+			attack1Box.gameObject.SetActive(true);
+		}
+		else if (attack2SpriteHitFrame == currentSprite.sprite)
+		{
+			attack2Box.gameObject.SetActive(true);
+		}
+		else if (attack3SpriteHitFrame == currentSprite.sprite)
+		{
+			attack3Box.gameObject.SetActive(true);
+		}
+		else
+		{
+			attack1Box.gameObject.SetActive(false);
+			attack2Box.gameObject.SetActive(false);
+			attack3Box.gameObject.SetActive(false);
+		}
+
 	}
 
 	private void Flip()
