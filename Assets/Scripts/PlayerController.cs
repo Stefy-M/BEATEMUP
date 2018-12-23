@@ -94,92 +94,94 @@ public class PlayerController : MonoBehaviour {
 		}
 		
 	}
-	// Update is called once per frame
-	void FixedUpdate () {
+    // Update is called once per frame
+    void FixedUpdate()
+    {
 
 
-		//-------MOVEMENT---------------------------------
-		float moveX = Input.GetAxis("Horizontal");
-		float moveZ = Input.GetAxis("Vertical");
+        //-------MOVEMENT---------------------------------
+        float moveX = Input.GetAxis("Horizontal");
+        float moveZ = Input.GetAxis("Vertical");
 
-		Vector3 movement = new Vector3(moveX, 0.0f, moveZ);
-		rb.velocity = movement * walkMoveSpeed;
-		rb.position = new Vector3(
-									Mathf.Clamp(rb.position.x, xMin, xMax),
-									transform.position.y,
-									Mathf.Clamp(rb.position.z, zMin, zMax));
+        Vector3 movement = new Vector3(moveX, 0.0f, moveZ);
+        rb.velocity = movement * walkMoveSpeed;
+        rb.position = new Vector3(
+                                    Mathf.Clamp(rb.position.x, xMin, xMax),
+                                    transform.position.y,
+                                    Mathf.Clamp(rb.position.z, zMin, zMax));
 
-		animator.SetFloat("Speed", movement.sqrMagnitude);
+        animator.SetFloat("Speed", movement.sqrMagnitude);
 
-		if (moveX < 0 && facingRight && canMove == true)
-		{
-			Flip();
-		}
-		else if (moveX > 0 && !facingRight && canMove == true)
-		{
-			Flip();
-		}
+        if (moveX < 0 && facingRight && canMove == true)
+        {
+            Flip();
+        }
+        else if (moveX > 0 && !facingRight && canMove == true)
+        {
+            Flip();
+        }
 
-		//------------COMBO ATTACK------------------------
-		if (Input.GetMouseButton(0))
-		{
-			animator.SetBool("Attack", true);
-		}
-		else
-		{
-			animator.SetBool("Attack", false);
-		}
+        //------------COMBO ATTACK------------------------
+        if (Input.GetMouseButton(0))
+        {
+            animator.SetBool("Attack", true);
+        }
+        else
+        {
+            animator.SetBool("Attack", false);
+        }
 
-		if (attack1SpriteHitFrame == currentSprite.sprite)
-		{
-			attack1Box.gameObject.SetActive(true);
-		}
-		else if (attack2SpriteHitFrame == currentSprite.sprite)
-		{
-			attack2Box.gameObject.SetActive(true);
-		}
-		else if (attack3SpriteHitFrame == currentSprite.sprite)
-		{
-			attack3Box.gameObject.SetActive(true);
-		}
-		else
-		{
-			attack1Box.gameObject.SetActive(false);
-			attack2Box.gameObject.SetActive(false);
-			attack3Box.gameObject.SetActive(false);
-		}
+        if (attack1SpriteHitFrame == currentSprite.sprite)
+        {
+            attack1Box.gameObject.SetActive(true);
+        }
+        else if (attack2SpriteHitFrame == currentSprite.sprite)
+        {
+            attack2Box.gameObject.SetActive(true);
+        }
+        else if (attack3SpriteHitFrame == currentSprite.sprite)
+        {
+            attack3Box.gameObject.SetActive(true);
+        }
+        else
+        {
+            attack1Box.gameObject.SetActive(false);
+            attack2Box.gameObject.SetActive(false);
+            attack3Box.gameObject.SetActive(false);
+        }
 
-		//---BLOCK--------------------
-		if (Input.GetMouseButton(2))
-		{
-			animator.SetBool("Block", true);
-			isBlocking = true;
-		}
-		else
-		{
-			animator.SetBool("Block", false);
-			isBlocking = false;
-		}
+        //---BLOCK--------------------
+        if (Input.GetMouseButton(2))
+        {
+            animator.SetBool("Block", true);
+            isBlocking = true;
+        }
+        else
+        {
+            animator.SetBool("Block", false);
+            isBlocking = false;
+        }
 
-		//---TEST HURT-----------------------------
-		if (Input.GetKeyDown(KeyCode.Q))
-		{
-			animator.SetBool("IsHit", true);
-		}
-		else { animator.SetBool("IsHit", false); }
+        //---TEST HURT-----------------------------
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            animator.SetBool("IsHit", true);
+        }
+        else { animator.SetBool("IsHit", false); }
 
-		//----KNOCKED DOWN--------------------------
-		if (Input.GetKeyDown(KeyCode.E))
-		{
-			
-			StartCoroutine(KnockedDown());
-			
-		}
+        //----KNOCKED DOWN--------------------------
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+
+            StartCoroutine(KnockedDown());
+
+        }
+    }
 
 		//------JUMP-------------------------------
 		
 
-	private IEnumerator KnockedDown()
+	 IEnumerator KnockedDown()
 	{
 		float initY = transform.position.y;
 		
@@ -203,7 +205,7 @@ public class PlayerController : MonoBehaviour {
 		
 	}
 
-	private void Flip()
+	 void Flip()
 	{
 		facingRight = !facingRight;
 		Vector3 theScale = transform.localScale;
