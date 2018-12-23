@@ -7,6 +7,12 @@ public class PlayerController : MonoBehaviour {
 
 	[Range(0f, 10f)]
 	public float moveSpeed;
+	public float knockBackForce;
+	public bool isBlocking;
+	public bool canMove;
+	public float attackMovementSpeed;
+	public float knockedDownTime;
+	private float walkMoveSpeed;
 	public float xMin, xMax, zMin, zMax;
 	public GameObject attack1Box, attack2Box, attack3Box;
 
@@ -16,6 +22,7 @@ public class PlayerController : MonoBehaviour {
 
 	private Rigidbody rb;
 	private Animator animator;
+	
 	private AnimatorStateInfo curStateInfo;
 	private bool facingRight;
 
@@ -33,19 +40,25 @@ public class PlayerController : MonoBehaviour {
 	static int attack2State = Animator.StringToHash("Base Layer.Attack2");
 	static int attack3State = Animator.StringToHash("Base Layer.Attack3");
 	static int attack4State = Animator.StringToHash("Base Layer.Attack4");
+	static int blockState = Animator.StringToHash("Base Layer.Block");
 
 	// Use this for initialization
 	void Start () {
+		
 		rb = GetComponent<Rigidbody>();
 		currentSprite = GetComponent<SpriteRenderer>();
 		animator = GetComponent<Animator>();
 		facingRight = true;
+		canMove = true;
+		walkMoveSpeed = moveSpeed;
+		//standPos = transform.position;
 	}
 
 	private void Update()
 	{
 		curStateInfo = animator.GetCurrentAnimatorStateInfo(0);
 		currentState = curStateInfo.fullPathHash;
+		
 
 		if (currentState == idleState)
 			Debug.Log("Idle State");
@@ -65,6 +78,20 @@ public class PlayerController : MonoBehaviour {
 			Debug.Log("Attack3 State");
 		if (currentState == attack4State)
 			Debug.Log("Attack4 State");
+		if (currentState == blockState)
+			Debug.Log("Block State");
+
+
+		//---Control Speed based on commands-----------------
+
+		if (currentState == idleState || currentState == walkState)
+		{
+			walkMoveSpeed = moveSpeed;
+		}
+		else
+		{
+			walkMoveSpeed = attackMovementSpeed;
+		}
 		
 	}
 	// Update is called once per frame
@@ -76,7 +103,7 @@ public class PlayerController : MonoBehaviour {
 		float moveZ = Input.GetAxis("Vertical");
 
 		Vector3 movement = new Vector3(moveX, 0.0f, moveZ);
-		rb.velocity = movement * moveSpeed;
+		rb.velocity = movement * walkMoveSpeed;
 		rb.position = new Vector3(
 									Mathf.Clamp(rb.position.x, xMin, xMax),
 									transform.position.y,
@@ -84,11 +111,11 @@ public class PlayerController : MonoBehaviour {
 
 		animator.SetFloat("Speed", movement.sqrMagnitude);
 
-		if (moveX < 0 && facingRight)
+		if (moveX < 0 && facingRight && canMove == true)
 		{
 			Flip();
 		}
-		else if (moveX > 0 && !facingRight)
+		else if (moveX > 0 && !facingRight && canMove == true)
 		{
 			Flip();
 		}
@@ -122,6 +149,58 @@ public class PlayerController : MonoBehaviour {
 			attack3Box.gameObject.SetActive(false);
 		}
 
+		//---BLOCK--------------------
+		if (Input.GetMouseButton(2))
+		{
+			animator.SetBool("Block", true);
+			isBlocking = true;
+		}
+		else
+		{
+			animator.SetBool("Block", false);
+			isBlocking = false;
+		}
+
+		//---TEST HURT-----------------------------
+		if (Input.GetKeyDown(KeyCode.Q))
+		{
+			animator.SetBool("IsHit", true);
+		}
+		else { animator.SetBool("IsHit", false); }
+
+		//----KNOCKED DOWN--------------------------
+		if (Input.GetKeyDown(KeyCode.E))
+		{
+			
+			StartCoroutine(KnockedDown());
+			
+		}
+
+		//------JUMP-------------------------------
+		
+
+	private IEnumerator KnockedDown()
+	{
+		float initY = transform.position.y;
+		
+		animator.Play("Fall");
+		//transform.position = standPos;
+		canMove = false;
+
+		if (facingRight == false)
+		{
+			rb.AddForce(transform.right * knockBackForce);
+			//transform.position.y = -0.013;
+		}
+		else if (facingRight == true)
+		{
+			rb.AddForce(transform.right * (-1 * knockBackForce));
+		}
+		yield return new WaitForSeconds(knockedDownTime);
+		animator.Play("Idle");
+		canMove = true;
+		
+		
 	}
 
 	private void Flip()

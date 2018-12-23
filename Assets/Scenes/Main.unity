@@ -126,7 +126,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4733631818452930, guid: 5412d919b1ff2d043a1c1eee127f682a, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0.084
+      value: 0.018
       objectReference: {fileID: 0}
     - target: {fileID: 4733631818452930, guid: 5412d919b1ff2d043a1c1eee127f682a, type: 2}
       propertyPath: m_LocalPosition.z
@@ -171,7 +171,7 @@ Prefab:
         type: 2}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300050, guid: 62d04da31b15cf24c8918b18c126779b,
+      objectReference: {fileID: 21300000, guid: 7c5a9e5465929b840bc37e2dab5155c2,
         type: 3}
     - target: {fileID: 114469084826212740, guid: 5412d919b1ff2d043a1c1eee127f682a,
         type: 2}
@@ -206,6 +206,21 @@ Prefab:
       value: 
       objectReference: {fileID: 21300056, guid: 62d04da31b15cf24c8918b18c126779b,
         type: 3}
+    - target: {fileID: 114469084826212740, guid: 5412d919b1ff2d043a1c1eee127f682a,
+        type: 2}
+      propertyPath: attackMovementSpeed
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114469084826212740, guid: 5412d919b1ff2d043a1c1eee127f682a,
+        type: 2}
+      propertyPath: knockedDownTime
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114469084826212740, guid: 5412d919b1ff2d043a1c1eee127f682a,
+        type: 2}
+      propertyPath: knockBackForce
+      value: 400
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5412d919b1ff2d043a1c1eee127f682a, type: 2}
   m_IsPrefabAsset: 0
