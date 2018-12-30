@@ -184,9 +184,9 @@ public class PlayerController : MonoBehaviour {
 	 IEnumerator KnockedDown()
 	{
 		float initY = transform.position.y;
-		
+		Vector3 newPos = new Vector3(transform.position.x, -.25f, transform.position.z);
 		animator.Play("Fall");
-		//transform.position = standPos;
+		transform.position = newPos;
 		canMove = false;
 
 		if (facingRight == false)
