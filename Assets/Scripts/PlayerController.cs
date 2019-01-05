@@ -153,6 +153,7 @@ public class PlayerController : MonoBehaviour {
         //---BLOCK--------------------
         if (Input.GetMouseButton(2))
         {
+			
             animator.SetBool("Block", true);
             isBlocking = true;
         }
